@@ -1,18 +1,12 @@
 import assert from 'assert';
 import Cell from '../model/Cell';
 
-describe('Cell', () => {
-    it('По умолчанию у Cell свойство alive должно быть false', () => {
+describe('Cell', () => { 
+    it('При создании cell свойство alive равно false', () => {
         const cell = new Cell();
 
-        assert.isFalse(cell.alive);
+        assert.equal(cell.alive, false);
     });
-
-    it('setAlive', () => { 
-        const cell = new Cell();
-
-        cell.setAlive();
-        
-        assert.isTrue(cell.alive);
-    })
 });
+
+//можно же обойтись и без этого класса

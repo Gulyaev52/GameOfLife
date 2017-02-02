@@ -19,15 +19,19 @@ module.exports = {
         ], 
 
         loaders: [
-        {
-            test: /\.pug$/,
-            loader: 'pug'
-        },
-        {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel?presets[]=es2015'
-        }]
+            {
+                test: /\.pug$/,
+                loader: 'pug'
+            }, 
+            {
+                test: /\.js$/,
+                loader: 'babel',
+                exclude: /node_modules/,
+                query: { 
+                    presets: ['babel-preset-latest', 'babel-polyfill'] 
+                },
+            }
+        ]
     },
 
     devServer: {
