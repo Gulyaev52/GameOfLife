@@ -1,0 +1,13 @@
+mixin board(board)
+    table.board
+        each row in board
+            tr.board__row
+                each cell in row
+                    td.board__cell
+                        +cell(cell.alive)
+
+mixin cell(isAlive)
+    -const state = isAlive ? 'alive' : 'dead';
+    .cell(class = 'cell_' + state)
+
++board(board)

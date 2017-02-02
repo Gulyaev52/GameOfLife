@@ -121,21 +121,8 @@ describe('Life', () => {
 
                 assert.deepEqual(neighbors, expectedResult);
             }); 
-            it('', () => {
-                const life = new Life(3, 5);
-                const initialBoard = [
-                    [{ alive: false }, { alive: false }, { alive: false }, { alive: true }, { alive: true }],
-                    [{ alive: false }, { alive: false }, { alive: true }, { alive: false }, { alive: false }],
-                    [{ alive: false }, { alive: false }, { alive: false }, { alive: true }, { alive: true }]
-                ];
-                life.board = initialBoard;
-
-                const neighbors = life.countAliveNeighbors(3, 1);
-
-                assert.equal(neighbors, 5);
-            });
         });
-    });
+    }); 
 
     describe('toggleStateCell', () => {
         describe('переключает состояние ячейки', () => {

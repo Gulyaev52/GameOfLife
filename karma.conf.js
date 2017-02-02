@@ -20,7 +20,14 @@ module.exports = function (config) {
             '*.js': ['webpack']
         },
 
-        webpack: webpackConfig,
+        webpack: {
+            module: webpackConfig.module,
+            resolve: {
+                alias: {
+                    sinon: 'sinon/pkg/sinon.js',
+                },
+            }
+        },
 
         plugins: [
             require('karma-webpack'),
