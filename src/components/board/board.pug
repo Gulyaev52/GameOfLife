@@ -1,0 +1,11 @@
+include ../cell/cell
+
+mixin board(board)
+    table.board
+        each row in board
+            tr.board__row
+                each cell in row
+                    td.board__cell
+                        +cell(cell.alive)
+
++board(board)

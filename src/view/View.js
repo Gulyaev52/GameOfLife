@@ -1,6 +1,7 @@
-import gameLifeTemplate from './game-life-template.pug';
-import boardTemplate from './board-template.pug';
+import gameLifeTemplate from '../components/game-life/game-life.pug';
+import boardTemplate from '../components/board/board.pug';
 import eventEmitter from 'events';
+import {qs, on, delegate} from '../helpers';
 
 class View extends eventEmitter {
     constructor({ elem }) {
@@ -15,24 +16,19 @@ class View extends eventEmitter {
     }
 
     _attachEventHandlers() {
-        this._boardElem.addEventListener('click', event => {
-            const cellElem = event.target.closest('.cell');
-
-            if (!cellElem)
-                return;
-            
-            this.toggleStateCell(cellElem);
+        delegate(this._boardElem, '.cell', 'click', ({ target }) => {
+            this.toggleStateCell(target);
         });
 
-        this._inputHeight.addEventListener('change', this.changeHeight.bind(this));
+        on(this._inputHeight, 'change', this.changeHeight.bind(this));
 
-        this._inputWidth.addEventListener('change', this.changeWidth.bind(this));
+        on(this._inputWidth, 'change', this.changeWidth.bind(this));
 
-        this._buttonClear.addEventListener('click', this.buttonClearHandler.bind(this));
+        on(this._buttonClear, 'click', this.buttonClearHandler.bind(this));
 
-        this._buttonPause.addEventListener('click', this.buttonPauseHandler.bind(this));
+        on(this._buttonPause, 'click', this.buttonPauseHandler.bind(this));
 
-        this._buttonStart.addEventListener('click', this.buttonStartHandler.bind(this));
+        on(this._buttonStart, 'click', this.buttonStartHandler.bind(this));
     }
 
     draw(board) { 
@@ -81,12 +77,12 @@ class View extends eventEmitter {
     }
 
     _setElems() {
-        this._boardElem = this._elem.querySelector('.game-life__board');
-        this._inputHeight = this._elem.querySelector('.input.input_height');
-        this._inputWidth = this._elem.querySelector('.input.input_width');
-        this._buttonPause = this._elem.querySelector('.button.button_pause');
-        this._buttonStart = this._elem.querySelector('.button.button_start');
-        this._buttonClear = this._elem.querySelector('.button.button_clear');
+        this._boardElem = qs('.game-life__board', this._el);
+        this._inputHeight = qs('.input.input_height', this._elem);
+        this._inputWidth = qs('.input.input_width', this._elem);
+        this._buttonPause = qs('.button.button_pause', this._elem);
+        this._buttonStart = qs('.button.button_start', this._elem);
+        this._buttonClear = qs('.button.button_clear', this._elem);
     }
 
     _getCellPosition(cellElem) {   
