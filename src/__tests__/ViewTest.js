@@ -100,16 +100,24 @@ describe('View', () => {
         let cellElem = null;
 
         beforeEach(() => {
-            cellElem = document.createElement('div');
-            cellElem.classList.add('cell');
+            const board = document.createElement('table');
+            board.innerHTML = `
+                <tr>
+                    <td><div class='cell'></div></td>
+                    <td><div class='cell'></div></td>
+                </tr>`;
+
+            document.querySelector('.game-life__board').appendChild(board);
+
+            cellElem = board.querySelector('.cell');
         });
 
-        it('изменяет класс элемента с alive на dead', () => {  
+        it('изменяет класс элемента с alive на dead', () => {   
             cellElem.classList.add('cell_alive');
 
             view.toggleStateCell(cellElem);
 
-            asset.equal(cellElem.classList.contains('cell_dead'), true);
+            assert(cellElem.classList.contains('cell_dead'));
         });
 
         it('изменяет класс элемента с dead на alive', () => { 
@@ -117,28 +125,156 @@ describe('View', () => {
 
             view.toggleStateCell(cellElem);
 
-            asset.equal(cellElem.classList.contains('cell_alive'), true);
+            assert(cellElem.classList.contains('cell_alive'));
         });
 
         it('вызывает событие changeCell', () => {
             cellElem.classList.add('cell_alive');
 
             const callback = sinon.spy();
-            view.on('changeCell', callback);
 
-            view.toggleStateCell(cellElem, 4, 4);
+            view.on('changeCell', callback); 
 
-            assert(callback.called); //!!!!!!!
+            view.toggleStateCell(cellElem);
+
+            assert(callback.called);
         });
 
-        it('возвращает позицию изменённой ячейки', () => {
-            const table = document.createElement('table');
-            table.innerHTML = `
+        it('в обработчик события передаётся позиция изменённой клетки', () => { 
+            const callback = sinon.spy();
+            callback.withArgs(0, 0);
+
+            view.on('changeCell', callback); 
+            
+            view.toggleStateCell(cellElem);
+
+            assert(callback.withArgs(0, 0).calledOnce);
+        });
+    });
+
+    describe('событие changeCell', () => {
+        it('при клике на клетку вызывается событие', () => {
+            const board = document.createElement('table');
+            board.innerHTML = `
                 <tr>
-                    <td class='cell cell_alive'></td><td class='cell cell_dead'></td>
-                </tr> 
-            `; 
-            assert.equal(true, false);
+                    <td><div class='cell'></div></td>
+                    <td><div class='cell'></div></td>
+                </tr>`;
+
+            document.querySelector('.game-life__board').appendChild(board);
+            
+            const cellElem = board.querySelector('.cell');
+
+            const callback = sinon.spy();
+            view.on('changeCell', callback);
+
+            cellElem.click();
+
+            assert(callback.called);
+        });
+    });
+
+    describe('событие changeHeight', () => {
+        it('при изменение высоты вызывается событие', () => {
+            const inputHeight = document.querySelector('.input_height');
+
+            const callback = sinon.spy();
+
+            view.on('changeHeight', callback);
+            
+            const eventChange = new Event('change', { bubbles: true });
+            inputHeight.value = 15;
+            inputHeight.dispatchEvent(eventChange);
+
+            assert(callback.called);
+        });
+
+        it('при изменение высоты передаётся новое значение', () => {
+            const inputHeight = document.querySelector('.input_height');
+
+            const callback = sinon.spy();
+            callback.withArgs(15);
+
+            view.on('changeHeight', callback);
+            
+            const eventChange = new Event('change', { bubbles: true });
+            inputHeight.value = 15;
+            inputHeight.dispatchEvent(eventChange);
+
+            assert(callback.withArgs(15).calledOnce);
+        });
+    });
+
+    describe('событие changeWidth', () => {
+        it('при изменение ширины вызывается событие', () => {
+            const inputWidth = document.querySelector('.input_width');
+
+            const callback = sinon.spy();
+
+            view.on('changeWidth', callback);
+            
+            const eventChange = new Event('change', { bubbles: true });
+            inputWidth.value = 15;
+            inputWidth.dispatchEvent(eventChange);
+
+            assert(callback.called);
+        });
+
+        it('при изменение ширины передаётся новое значение', () => {
+            const inputWidth = document.querySelector('.input_width');
+
+            const callback = sinon.spy();
+            callback.withArgs(15);
+
+            view.on('changeWidth', callback);
+            
+            const eventChange = new Event('change', { bubbles: true });
+            inputWidth.value = 15;
+            inputWidth.dispatchEvent(eventChange);
+
+            assert(callback.withArgs(15).calledOnce);
+        });
+    });
+
+    describe('событие clearBoard', () => {
+        it('при нажатие на кнопку clear вызывается событие', () => {
+            const buttonClear = document.querySelector('.button_clear');
+
+            const callback = sinon.spy();
+
+            view.on('clearBoard', callback);
+
+            buttonClear.click();
+
+            assert(callback.called);
+        });
+    });
+
+    describe('событие pause', () => {
+        it('при нажатие на кнопку pause вызывается событие', () => {
+            const buttonPause = document.querySelector('.button_pause');
+
+            const callback = sinon.spy();
+
+            view.on('pause', callback);
+
+            buttonPause.click();
+
+            assert(callback.called);
+        });
+    });
+
+    describe('событие start', () => {
+        it('при нажатие на кнопку start вызывается событие', () => {
+            const buttonStart = document.querySelector('.button_start');
+
+            const callback = sinon.spy();
+
+            view.on('start', callback);
+
+            buttonStart.click();
+
+            assert(callback.called);
         });
     });
 });
@@ -222,3 +358,29 @@ if (!Array.from) {
     };
   }());
 }
+
+
+(function(e){
+
+e.matches || (e.matches=e.matchesSelector||function(selector){
+  var matches = document.querySelectorAll(selector), th = this;
+  return Array.prototype.some.call(matches, function(e){
+     return e === th;
+  });
+});
+
+})(Element.prototype);
+
+
+(function(e){ 
+ e.closest = e.closest || function(css){ 
+   var node = this;
+  
+   while (node) { 
+      if (node.matches(css)) return node; 
+      else node = node.parentElement; 
+   } 
+   return null; 
+ } 
+})(Element.prototype);
+

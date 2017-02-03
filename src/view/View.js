@@ -10,6 +10,29 @@ class View extends eventEmitter {
         elem.innerHTML = gameLifeTemplate();
         
         this._setElems();
+
+        this._attachEventHandlers();
+    }
+
+    _attachEventHandlers() {
+        this._boardElem.addEventListener('click', event => {
+            const cellElem = event.target.closest('.cell');
+
+            if (!cellElem)
+                return;
+            
+            this.toggleStateCell(cellElem);
+        });
+
+        this._inputHeight.addEventListener('change', this.changeHeight.bind(this));
+
+        this._inputWidth.addEventListener('change', this.changeWidth.bind(this));
+
+        this._buttonClear.addEventListener('click', this.buttonClearHandler.bind(this));
+
+        this._buttonPause.addEventListener('click', this.buttonPauseHandler.bind(this));
+
+        this._buttonStart.addEventListener('click', this.buttonStartHandler.bind(this));
     }
 
     draw(board) { 
@@ -26,9 +49,35 @@ class View extends eventEmitter {
             cellElem.classList.add('cell_alive');
         }
 
-        // const cellPosition = this._getCellPosition(cellElem);
+        const cellPosition = this._getCellPosition(cellElem);
         
-        this.emit('changeCell', x, y);
+        this.emit('changeCell', ...cellPosition);
+    }
+
+    changeHeight() { 
+        this.changeSize(this._inputHeight, 'changeHeight');
+    }
+
+    changeWidth() {
+        this.changeSize(this._inputWidth, 'changeWidth');
+    }
+
+    changeSize(input, eventName) {
+        const newSize = parseInt(input.value);
+
+        this.emit(eventName, newSize);
+    }
+
+    buttonClearHandler() {
+        this.emit('clearBoard');
+    }
+
+    buttonStartHandler() {
+        this.emit('start');
+    }
+
+    buttonPauseHandler() {
+        this.emit('pause');
     }
 
     _setElems() {
@@ -40,11 +89,12 @@ class View extends eventEmitter {
         this._buttonClear = this._elem.querySelector('.button.button_clear');
     }
 
-    _getCellPosition(cell) { 
-        const row = cell.parentNode;
+    _getCellPosition(cellElem) {   
+        const td = cellElem.closest('td');
+        const tr = td.closest('tr');
 
-        const x = cell.cellIndex;
-        const y = row.rowIndex;
+        const x = td.cellIndex;
+        const y = tr.rowIndex;
 
         return [x, y];
     }
