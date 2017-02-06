@@ -92,7 +92,7 @@
 	        this._gameLife = gameLife;
 	        this._timerId = null;
 	
-	        this._view.on('start', this.play.bind(this));
+	        this._view.on('start', this.start.bind(this));
 	        this._view.on('pause', this.pause.bind(this));
 	        this._view.on('clearBoard', this.clearBoard.bind(this));
 	        this._view.on('changeCell', this.toggleStateCell.bind(this));
@@ -120,9 +120,11 @@
 	            this.drawBoard();
 	        }
 	    }, {
-	        key: 'play',
-	        value: function play() {
+	        key: 'start',
+	        value: function start() {
 	            var _this = this;
+	
+	            clearInterval(this._timerId);
 	
 	            this._timerId = setInterval(function () {
 	                _this._gameLife.nextGeneration();
@@ -373,17 +375,21 @@
 	var block = (this && this.block), attributes = (this && this.attributes) || {};
 	pug_html = pug_html + "\u003Cbutton" + (pug.attr("class", pug.classes(["button",`button_${type}`], [false,true]), false, true)) + "\u003E" + (pug.escape(null == (pug_interp = text) ? "" : pug_interp)) + "\u003C\u002Fbutton\u003E";
 	};
-	pug_html = pug_html + "\u003Cdiv class=\"game-life\"\u003E\u003Cdiv class=\"game-life__board\"\u003E \u003C\u002Fdiv\u003E\u003Cdiv class=\"game-life__controllers\"\u003E ";
+	pug_html = pug_html + "\u003Cdiv class=\"game-life\"\u003E\u003Cdiv class=\"game-life__board\"\u003E \u003C\u002Fdiv\u003E\u003Cdiv class=\"game-life__controllers\"\u003E \u003Cdiv class=\"game-life__controller\"\u003E";
 	pug_mixins["input"]({ type: 'height', value: 25 });
+	pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003Cdiv class=\"game-life__controller\"\u003E";
 	pug_mixins["input"]({ type: 'width', value: 50 });
+	pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003Cdiv class=\"game-life__controller\"\u003E";
 	pug_mixins["button"]({ type: 'start', text: 'start' });
+	pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003Cdiv class=\"game-life__controller\"\u003E";
 	pug_mixins["button"]({ type: 'pause', text: 'pause' });
+	pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003Cdiv class=\"game-life__controller\"\u003E";
 	pug_mixins["button"].call({
 	block: function(){
 	pug_html = pug_html + " ";
 	}
 	}, { type: 'clear', text: 'clear' });
-	pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1255,6 +1261,8 @@
 	                });
 	            });
 	
+	            this.height = height;
+	            this.width = width;
 	            this.board = newBoard;
 	        }
 	    }, {

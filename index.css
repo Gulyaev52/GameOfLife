@@ -5,6 +5,13 @@
   align-items: center;
   width: 100%;
 }
+.game-life__controllers {
+  margin-top: 10px;
+}
+.game-life__controller {
+  display: inline-block;
+  margin-right: 10px;
+}
 .input {
   width: 50px;
 }
@@ -14,13 +21,13 @@
   cursor: pointer;
 }
 .board__cell {
-  width: 10px;
-  height: 10px;
+  padding: 0;
+  margin: 0;
   border: 1px solid #888;
 }
 .cell {
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
 }
 .cell_alive {
   background-color: #000;
