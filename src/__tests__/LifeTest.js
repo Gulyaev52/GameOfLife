@@ -86,6 +86,18 @@ describe('Life', () => {
             ];
             assert.deepEqual(life.board, expectedResultC);
         });
+
+        it('корректно рассчитывает следующие поколения для поля с 1 живой клеткой', () => { 
+            const life = new Life(25, 50);
+            const initialBoard = life._createBoard(25, 50);
+            initialBoard[1][1].alive = true;
+            life.board = initialBoard; 
+
+            life.nextGeneration();
+            const expectedResult = life._createBoard(25, 50);
+
+            assert.deepEqual(life.board, expectedResult);
+        });
     }); 
 
     describe('getNeighbors', () => {
@@ -112,6 +124,7 @@ describe('Life', () => {
 
                 assert.deepEqual(neighbors, expectedResult);
             });
+
             it('для ячейки в позиции 0, 0 возвращает 3 ближайшие ячейки', () => {
                 const neighbors = life.getNeighbors(0, 0);
 

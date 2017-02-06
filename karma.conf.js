@@ -11,7 +11,7 @@ module.exports = function (config) {
         frameworks: ['mocha', 'sinon', 'chai'],
 
         files: [ 
-            '*Test.js'
+            'LifeTest.js'
         ],
 
         reporters: ['mocha'],

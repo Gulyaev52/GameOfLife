@@ -10,10 +10,10 @@ export default class Life {
 
     nextGeneration() {  
         this.board = this.board.map((row, y) => 
-            row.map((cell, x) => { 
+            row.map((cell, x) => {  
                 const newCell = new Cell(cell.alive); 
-                const numAliveNeighbors = this.countAliveNeighbors(x, y);
-                
+                const numAliveNeighbors = this.countAliveNeighbors(x, y); 
+
                 if (cell.alive) {
                     if (numAliveNeighbors != 2 && numAliveNeighbors != 3) { 
                         newCell.alive = false;
@@ -26,6 +26,10 @@ export default class Life {
                 return newCell;
             })
         ); 
+    }
+
+    clearBoard() {
+        this.board = this._createBoard(this.height, this.width);
     }
 
     countAliveNeighbors(x, y) { 
@@ -60,7 +64,7 @@ export default class Life {
     _createBoard(height, width) { 
         const board = new Array(height)
             .fill(null)
-            .map(_ => new Array(width).fill(new Cell()));
+            .map(_ => new Array(width).fill(null).map(_ => new Cell()));
             
         return board;
     }

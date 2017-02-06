@@ -1,0 +1,32 @@
+.game-life {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.input {
+  width: 50px;
+}
+.board {
+  border: 2px solid #888;
+  border-collapse: collapse;
+  cursor: pointer;
+}
+.board__cell {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #888;
+}
+.cell {
+  width: 10px;
+  height: 10px;
+}
+.cell_alive {
+  background-color: #000;
+}
+.cell_dead {
+  background-color: #fff;
+}
+
+/*# sourceMappingURL=index.css.map*/

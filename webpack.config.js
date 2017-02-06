@@ -1,12 +1,12 @@
 'use strict';
 
-//extractTextPlugin
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-    context: __dirname + '/src',
+module.exports = { 
     entry: {
-        main: './app.js'
+        main: './src/app.js'
     },
     output: {
         path: './public',
@@ -30,7 +30,11 @@ module.exports = {
                 query: { 
                     presets: ['babel-preset-latest', 'babel-polyfill'] 
                 },
-            }
+            },
+            { 
+                test: /\.(css|styl)/, 
+                loader: ExtractTextPlugin.extract('css!stylus') 
+            },
         ]
     },
 
@@ -44,7 +48,8 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: './index.pug'
-        })
+            template: './src/index.pug'
+        }),
+        new ExtractTextPlugin('index.css', { allChunks: true })
     ]
 };

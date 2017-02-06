@@ -1,9 +1,11 @@
+include ../input/input
+include ../button/button
+
 .game-life
-    .game-life__board
-        .board
+    .game-life__board 
     .game-life__controllers 
-        input.input.input_height 
-        input.input.input_width 
-        button.button.button_clear 
-        button.button.button_pause 
-        button.button.button_start
+        +input({ type: 'height', value: 25 })
+        +input({ type: 'width', value: 50 })
+        +button({ type: 'start', text: 'start' })
+        +button({ type: 'pause', text: 'pause' })
+        +button({ type: 'clear', text: 'clear' }) 
