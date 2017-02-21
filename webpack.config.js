@@ -1,22 +1,55 @@
 'use strict';
 
+const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const pageList = [
+  'index'
+];
+
+const entries = {};
+pageList.forEach(page => { 
+  entries[page] = ['babel-polyfill', `./src/pages/${page}/${page}.js`]; 
+});
+
+const htmlPlugins = [];
+
+pageList.forEach(page => {
+  htmlPlugins.push(new HtmlWebpackPlugin({
+    template: `src/pages/${page}/${page}.pug`,
+    filename: `${page}.html`,
+    chunks: [page]
+  }));
+});
+
 module.exports = { 
-    entry: {
-        main: './src/app.js'
-    },
+    entry: entries,
+
     output: {
-        path: './public',
-        filename: '[name].bundle.js'
+        path: path.join(__dirname, 'public'),
+        filename: '[name].bundle.js',
+    },  
+
+    eslint: {
+        configFile: './.eslintrc.yml'
     },
 
     module: {
         noParse: [
             /sinon\.js/
         ], 
+
+        preLoaders: [
+            {
+                test: /\.js$/, 
+                loader: "eslint-loader", 
+                include: [ 
+                    path.resolve(__dirname, 'src'),  
+                ]
+            }
+        ],  
 
         loaders: [
             {
@@ -26,9 +59,11 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel',
-                exclude: /node_modules/,
+                include: [ 
+                    path.resolve(__dirname, 'src')
+                ],
                 query: { 
-                    presets: ['babel-preset-latest', 'babel-polyfill'] 
+                    presets: ['babel-preset-latest'] 
                 },
             },
             { 
@@ -38,6 +73,11 @@ module.exports = {
         ]
     },
 
+    resolve: {
+        modulesDirectories: ['node_modules', 'src'],
+        extensions: ['', '.js', '.styl', '.pug']
+    },
+
     devServer: {
         host: 'localhost',
         port: 8080
@@ -45,11 +85,8 @@ module.exports = {
 
     devtool: 'source-map',
 
-    plugins: [
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: './src/index.pug'
-        }),
-        new ExtractTextPlugin('index.css', { allChunks: true })
+    plugins: [ 
+        new ExtractTextPlugin('[name].css', { allChunks: true }),
+        ...htmlPlugins
     ]
 };

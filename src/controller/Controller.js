@@ -11,7 +11,7 @@ class Controller {
         this._view.on('changeHeight', this.setHeight.bind(this));
         this._view.on('changeWidth', this.setWidth.bind(this));
 
-        this.drawBoard();
+        this._drawBoard();
     }
 
     toggleStateCell(x, y) {
@@ -20,18 +20,18 @@ class Controller {
 
     setHeight(height) {
         this._gameLife.setHeight(height);
-        this.drawBoard();
+        this._drawBoard();
     }
 
     setWidth(width) {
         this._gameLife.setWidth(width);
-        this.drawBoard();       
+        this._drawBoard();       
     }
 
-    play() { 
-        this._timerId = setInterval(() => { 
+    play() {  
+        this._timerId = setInterval(() => {  
             this._gameLife.nextGeneration();
-            this.drawBoard();
+            this._drawBoard();
         }, 500);
     } 
 
@@ -42,11 +42,12 @@ class Controller {
     clearBoard() {
         this._gameLife.clearBoard();
         this.pause();
-        this.drawBoard();
+        this._drawBoard();
     }
 
-    drawBoard() {
+    _drawBoard() {
         const board = this._gameLife.board;
+        console.log(this._gameLife.toString(), '\n\n');
         this._view.draw(board);
     }
 }

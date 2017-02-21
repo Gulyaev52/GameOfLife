@@ -1,26 +1,35 @@
 .game-life {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
 }
+.game-life__controllers {
+  display: flex;
+  margin-top: 0.625rem;
+}
+.game-life__input-width,
+.game-life__button-start,
+.game-life__button-pause,
+.game-life__button-clear {
+  margin-left: 0.625rem;
+}
 .input {
-  width: 50px;
+  width: 3.125rem;
 }
 .board {
-  border: 2px solid #888;
+  border: 0.125rem solid #888;
   border-collapse: collapse;
-  cursor: pointer;
 }
 .board__cell {
-  width: 10px;
-  height: 10px;
-  border: 1px solid #888;
+  padding: 0;
+  border: 0.0625rem solid #888;
+  cursor: pointer;
 }
 .cell {
-  width: 10px;
-  height: 10px;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
 }
 .cell_alive {
   background-color: #000;

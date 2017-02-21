@@ -1,2 +1,5 @@
-mixin button({ type, text })
-    button.button(class = `button_${type}`)= text
+mixin button({ type, text, tabindex=0 })
+    button.button(
+        class = `button_${type}`, 
+        tabindex = tabindex
+    )= text

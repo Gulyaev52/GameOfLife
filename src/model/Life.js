@@ -1,15 +1,14 @@
 import Cell from './Cell'
 
-export default class Life {
-    constructor(height=5, width=5) {
+class Life {
+    constructor(height=10, width=10) {
         this.height = height;
         this.width = width;
-
         this.board = this._createBoard(height, width); 
     }
 
-    nextGeneration() {  
-        this.board = this.board.map((row, y) => 
+    nextGeneration() {   
+        this.board = this.board.map((row, y) => ( 
             row.map((cell, x) => {  
                 const newCell = new Cell(cell.alive); 
                 const numAliveNeighbors = this.countAliveNeighbors(x, y); 
@@ -22,10 +21,10 @@ export default class Life {
                 else if (numAliveNeighbors == 3) { 
                     newCell.alive = true;
                 } 
-                
+                console.log(newCell.alive);
                 return newCell;
             })
-        ); 
+        )); 
     }
 
     clearBoard() {
@@ -33,18 +32,19 @@ export default class Life {
     }
 
     countAliveNeighbors(x, y) { 
-        return this.getAliveNeighbors(x, y).length;
+        return this.getAliveNeighbors(this.getNeighbors(x, y)).length;
     }
 
-    getAliveNeighbors(x, y) {
+    getAliveNeighbors(neighbors) {
         const isAliveCell = cell => cell.alive;
         
-        return this.getNeighbors(x, y).filter(isAliveCell);
+        return neighbors.filter(isAliveCell);
     }
 
     getNeighbors(x, y) {
-        const getCoordNeighborCell = (xCell, yCell) => 
-            ([xDirection, yDirection]) => [xCell + xDirection, yCell + yDirection];
+        const getCoordNeighborCell = (xCell, yCell) => ( 
+            ([xDirection, yDirection]) => [xCell + xDirection, yCell + yDirection]
+        );
 
         const directions = [
             [-1, 0], [1, 0],
@@ -53,39 +53,24 @@ export default class Life {
             [1, -1], [-1, -1]
         ];  
 
-        const neighboringCells = directions
+        const neighbors = directions
             .map(getCoordNeighborCell(x, y)) 
             .map((coordNeighbors) => this.getCell(...coordNeighbors))
             .filter(Boolean);
 
-        return neighboringCells;
-    }
-
-    _createBoard(height, width) { 
-        const board = new Array(height)
-            .fill(null)
-            .map(_ => new Array(width).fill(null).map(_ => new Cell()));
-            
-        return board;
+        return neighbors;
     }
 
     setHeight(height) {
-        this.resize(height, this.width);
+        this._resize(height, this.width);
     }
 
     setWidth(width) {
-        this.resize(this.height, width);
+        this._resize(this.height, width);
     }
 
-    resize(height, width) {
-        const newBoard = this._createBoard(height, width)
-            .map((row, y) => row.map((cell, x) => this.getCell(x, y) || cell));
-        
-        this.board = newBoard;
-    }
-
-    getCell(x, y) {  
-        if (x >= 0 && x < this.width && y >= 0 && y < this.height)
+    getCell(x, y) {   
+        if (this._posCellInBoard(x, y))
             return this.board[y][x];
     }
 
@@ -95,8 +80,35 @@ export default class Life {
     }
 
     toString() {
-        return this.board.map(row =>
-            row.map(cell => cell.alive ? '1' : '0').join(' ')).join('\n');
+        const ALIVE = '1';
+        const DEAD = '0';
+
+        return this.board.map((row) => (
+            row.map(cell => cell.alive ? ALIVE : DEAD).join(' '))
+        ).join('\n');
+    }
+
+    _createBoard(height, width) {  
+        const board = new Array(height)
+            .fill(null)
+            .map(_ => new Array(width).fill(null).map(_ => new Cell()));
+            
+        return board;
+    }
+
+    _resize(height, width) {
+        const newBoard = this._createBoard(height, width)
+            .map((row, y) => (
+                row.map((cell, x) => this.getCell(x, y) || cell))
+            );
+        
+        this.board = newBoard;
+    }
+
+    _posCellInBoard(x, y) {
+        const xPosInBoard = x >= 0 && x < this.width;
+        const yPosInBoard = y >= 0 && y < this.height;
+        return xPosInBoard && yPosInBoard;
     }
 } 
 
@@ -143,3 +155,5 @@ if (!Array.prototype.fill) {
     return O;
   };
 }
+
+export default Life;

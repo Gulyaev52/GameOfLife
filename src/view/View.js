@@ -6,29 +6,11 @@ import {qs, on, delegate} from '../helpers';
 class View extends eventEmitter {
     constructor({ elem }) {
         super();
-        
+
         this._elem = elem; 
         elem.innerHTML = gameLifeTemplate();
-        
         this._findElems();
-
         this._attachEventHandlers();
-    }
-
-    _attachEventHandlers() {
-        delegate(this._boardElem, '.cell', 'click', ({ target }) => { 
-            this.toggleStateCell(target);
-        }); 
-        
-        on(this._inputHeight, 'change', this.changeHeight.bind(this));
-
-        on(this._inputWidth, 'change', this.changeWidth.bind(this));
-
-        on(this._buttonClear, 'click', () => this.emit('clearBoard')); 
-
-        on(this._buttonPause, 'click', () => this.emit('pause'));
-
-        on(this._buttonStart, 'click', () => this.emit('start'));
     }
 
     draw(board) { 
@@ -51,14 +33,14 @@ class View extends eventEmitter {
     }
 
     changeHeight() { 
-        this.changeSize(this._inputHeight, 'changeHeight');
+        this._changeSize(this._inputHeight, 'changeHeight');
     }
 
     changeWidth() {
-        this.changeSize(this._inputWidth, 'changeWidth');
+        this._changeSize(this._inputWidth, 'changeWidth');
     }
 
-    changeSize(input, eventName) {
+    _changeSize(input, eventName) {
         const newSize = parseInt(input.value);
 
         this.emit(eventName, newSize);
@@ -71,6 +53,22 @@ class View extends eventEmitter {
         this._buttonPause = qs('.button.button_pause', this._elem);
         this._buttonStart = qs('.button.button_start', this._elem);
         this._buttonClear = qs('.button.button_clear', this._elem);
+    }
+
+    _attachEventHandlers() {
+        delegate(this._boardElem, '.cell', 'click', ({ target }) => { 
+            this.toggleStateCell(target);
+        }); 
+        
+        on(this._inputHeight, 'change', this.changeHeight.bind(this));
+
+        on(this._inputWidth, 'change', this.changeWidth.bind(this));
+
+        on(this._buttonClear, 'click', () => this.emit('clearBoard')); 
+
+        on(this._buttonPause, 'click', () => this.emit('pause'));
+
+        on(this._buttonStart, 'click', () => this.emit('start'));
     }
 
     _getCellPosition(cellElem) {   

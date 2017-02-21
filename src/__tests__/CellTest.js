@@ -7,6 +7,4 @@ describe('Cell', () => {
 
         assert.equal(cell.alive, false);
     });
-});
-
-//можно же обойтись и без этого класса
+}); 

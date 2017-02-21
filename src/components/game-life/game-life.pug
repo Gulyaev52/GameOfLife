@@ -3,9 +3,14 @@ include ../button/button
 
 .game-life
     .game-life__board 
-    .game-life__controllers 
-        +input({ type: 'height', value: 25 })
-        +input({ type: 'width', value: 50 })
-        +button({ type: 'start', text: 'start' })
-        +button({ type: 'pause', text: 'pause' })
-        +button({ type: 'clear', text: 'clear' }) 
+    .game-life__controllers
+        .game-life__input-height 
+            +input({ type: 'height', value: 25 })
+        .game-life__input-width
+            +input({ type: 'width', value: 50 })
+        .game-life__button-start
+            +button({ type: 'start', text: 'start' })
+        .game-life__button-pause
+            +button({ type: 'pause', text: 'pause' })
+        .game-life__button-clear
+            +button({ type: 'clear', text: 'clear' }) 

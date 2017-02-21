@@ -86,8 +86,11 @@ describe('View', () => {
             
             const actualResult = Array
                 .from(document.querySelectorAll('.board__row')) 
-                .map(row => Array.from(row.querySelectorAll('.cell'))
-                                 .map(cell => cell.classList.contains('cell_alive')));
+                .map((row) => (
+                    Array.from(row.querySelectorAll('.cell'))
+                         .map(cell => cell.classList.contains('cell_alive'))
+                    )
+                );
 
             const expectedResult = board
                 .map(row => row.map(cell => cell.alive));
